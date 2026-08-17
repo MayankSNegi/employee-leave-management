@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Employees - Employee Leave Management{% endblock %}
+{% block page_title %}Employees{% endblock %}
+
+{% block content %}
+  <div class="section-heading">
+    <h2>All Employees</h2>
+  </div>
+
+  {% if employees %}
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Employee ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Department</th>
+            <th>Registered On</th>
+            <th>Leave Requests</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for emp in employees %}
+            <tr>
+              <td>{{ emp.employee_id }}</td>
+              <td>{{ emp.full_name }}</td>
+              <td>{{ emp.email }}</td>
+              <td>{{ emp.department }}</td>
+              <td>{{ emp.created_at.strftime('%d %b %Y') }}</td>
+              <td>{{ emp.leave_count }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="card empty-state">
+      <div class="empty-icon">&#128101;</div>
+      <p>No employees found.</p>
+    </div>
+  {% endif %}
+{% endblock %}

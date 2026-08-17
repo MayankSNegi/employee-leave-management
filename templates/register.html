@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - Employee Leave Management</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container" id="flashContainer">
+        {% for category, message in messages %}
+          {% set css_class = 'flash-info' %}
+          {% if category == 'success' %}{% set css_class = 'flash-success' %}{% endif %}
+          {% if category == 'error' %}{% set css_class = 'flash-error' %}{% endif %}
+          {% if category == 'warning' %}{% set css_class = 'flash-warning' %}{% endif %}
+          <div class="flash {{ css_class }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <div class="auth-page">
+    <div class="auth-card" style="max-width:520px;">
+      <div class="brand">
+        <div class="brand-badge">EL</div>
+        <h1>Create Account</h1>
+      </div>
+      <p class="auth-subtitle">Register as an employee to start applying for leave.</p>
+
+      <form method="POST" action="{{ url_for('register') }}" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="full_name">Full Name</label>
+            <input type="text" id="full_name" name="full_name"
+                   value="{{ form_data.full_name or '' }}" required autofocus>
+          </div>
+          <div class="form-group">
+            <label for="employee_id">Employee ID</label>
+            <input type="text" id="employee_id" name="employee_id"
+                   value="{{ form_data.employee_id or '' }}" placeholder="e.g. EMP001" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" value="{{ form_data.email or '' }}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="department">Department</label>
+          <select id="department" name="department" required>
+            <option value="" disabled {% if not form_data.department %}selected{% endif %}>Select department</option>
+            {% for dept in departments %}
+              <option value="{{ dept }}" {% if form_data.department == dept %}selected{% endif %}>{{ dept }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+          </div>
+          <div class="form-group">
+            <label for="confirm_password">Confirm Password</label>
+            <input type="password" id="confirm_password" name="confirm_password" required>
+            <div class="field-hint" id="passwordMatchFeedback"></div>
+          </div>
+        </div>
+
+        <p class="field-hint">Password must be at least 6 characters long.</p>
+
+        <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+      </form>
+
+      <div class="auth-footer">
+        Already have an account? <a href="{{ url_for('login') }}">Log in</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

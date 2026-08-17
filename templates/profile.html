@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - Employee Leave Management{% endblock %}
+{% block page_title %}My Profile{% endblock %}
+
+{% block content %}
+  <div class="card" style="max-width:680px;">
+    <div class="profile-header">
+      <div class="profile-avatar">{{ user.full_name[0] if user.full_name else '?' }}</div>
+      <div>
+        <h2 style="margin-bottom:2px;">{{ user.full_name }}</h2>
+        <p style="margin:0; color:var(--color-text-muted); font-size:14px;">{{ user.email }}</p>
+      </div>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-item">
+        <div class="info-label">Employee ID</div>
+        <div class="info-value">{{ user.employee_id }}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Role</div>
+        <div class="info-value" style="text-transform:capitalize;">{{ user.role }}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Email</div>
+        <div class="info-value">{{ user.email }}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Account Created</div>
+        <div class="info-value">{{ user.created_at.strftime('%d %b %Y') }}</div>
+      </div>
+    </div>
+
+    <h3 style="margin-bottom:14px;">Update Profile</h3>
+    <form method="POST" action="{{ url_for('profile') }}" novalidate>
+      <div class="form-group">
+        <label for="full_name">Full Name</label>
+        <input type="text" id="full_name" name="full_name" value="{{ user.full_name }}" required>
+      </div>
+      <div class="form-group">
+        <label for="department">Department</label>
+        <select id="department" name="department" required>
+          {% for dept in departments %}
+            <option value="{{ dept }}" {% if user.department == dept %}selected{% endif %}>{{ dept }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+  </div>
+{% endblock %}

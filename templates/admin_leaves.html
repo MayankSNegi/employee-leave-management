@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Leave Requests - Employee Leave Management{% endblock %}
+{% block page_title %}Manage Leave Requests{% endblock %}
+
+{% block content %}
+  <div class="filter-bar">
+    <div class="filter-pills">
+      <a class="filter-pill {% if status_filter == 'All' %}active{% endif %}"
+         href="{{ url_for('admin_leaves', status='All', department=department_filter) }}">All</a>
+      <a class="filter-pill {% if status_filter == 'Pending' %}active{% endif %}"
+         href="{{ url_for('admin_leaves', status='Pending', department=department_filter) }}">Pending</a>
+      <a class="filter-pill {% if status_filter == 'Approved' %}active{% endif %}"
+         href="{{ url_for('admin_leaves', status='Approved', department=department_filter) }}">Approved</a>
+      <a class="filter-pill {% if status_filter == 'Rejected' %}active{% endif %}"
+         href="{{ url_for('admin_leaves', status='Rejected', department=department_filter) }}">Rejected</a>
+    </div>
+
+    <form method="GET" action="{{ url_for('admin_leaves') }}" style="margin-left:auto;">
+      <input type="hidden" name="status" value="{{ status_filter }}">
+      <select name="department" onchange="this.form.submit()">
+        <option value="All" {% if department_filter == 'All' %}selected{% endif %}>All Departments</option>
+        {% for dept in departments %}
+          <option value="{{ dept }}" {% if department_filter == dept %}selected{% endif %}>{{ dept }}</option>
+        {% endfor %}
+      </select>
+    </form>
+  </div>
+
+  {% if leaves %}
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Leave ID</th>
+            <th>Employee ID</th>
+            <th>Name</th>
+            <th>Department</th>
+            <th>Type</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Days</th>
+            <th>Reason</th>
+            <th>Applied</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for leave in leaves %}
+            <tr>
+              <td>#{{ leave.id }}</td>
+              <td>{{ leave.employee_id }}</td>
+              <td>{{ leave.full_name }}</td>
+              <td>{{ leave.department }}</td>
+              <td>{{ leave.leave_type }}</td>
+              <td>{{ leave.start_date.strftime('%d %b %Y') }}</td>
+              <td>{{ leave.end_date.strftime('%d %b %Y') }}</td>
+              <td>{{ leave.num_days }}</td>
+              <td style="max-width:200px; white-space:normal;">{{ leave.reason }}</td>
+              <td>{{ leave.created_at.strftime('%d %b %Y') }}</td>
+              <td><span class="badge status-{{ leave.status|lower }}">{{ leave.status }}</span></td>
+              <td>
+                {% if leave.status == 'Pending' %}
+                  <div class="action-buttons">
+                    <form method="POST" action="{{ url_for('approve_leave', leave_id=leave.id) }}"
+                          class="inline-action-form">
+                      <input type="text" name="admin_comment" placeholder="Comment (optional)">
+                      <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                    </form>
+                    <form method="POST" action="{{ url_for('reject_leave', leave_id=leave.id) }}"
+                          class="inline-action-form reject-leave-form">
+                      <input type="text" name="admin_comment" placeholder="Reason (required)">
+                      <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                    </form>
+                  </div>
+                {% else %}
+                  <span style="color:var(--color-text-muted); font-size:12px;">
+                    {{ leave.admin_comment or 'No comment' }}
+                  </span>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="card empty-state">
+      <div class="empty-icon">&#128203;</div>
+      <p>No leave requests found.</p>
+    </div>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Employee Leave Management{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container" id="flashContainer">
+        {% for category, message in messages %}
+          {% set css_class = 'flash-info' %}
+          {% if category == 'success' %}{% set css_class = 'flash-success' %}{% endif %}
+          {% if category == 'error' %}{% set css_class = 'flash-error' %}{% endif %}
+          {% if category == 'warning' %}{% set css_class = 'flash-warning' %}{% endif %}
+          <div class="flash {{ css_class }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-badge">EL</div>
+        <div>
+          <div class="brand-name">LeaveManager</div>
+          <div class="brand-tag">Leave Management System</div>
+        </div>
+      </div>
+
+      <nav>
+        {% if session.role == 'employee' %}
+          <a class="nav-link {% if request.path == url_for('employee_dashboard') %}active{% endif %}"
+             href="{{ url_for('employee_dashboard') }}">
+             <span class="icon">&#9632;</span> Dashboard
+          </a>
+          <a class="nav-link {% if request.path == url_for('apply_leave') %}active{% endif %}"
+             href="{{ url_for('apply_leave') }}">
+             <span class="icon">&#43;</span> Apply Leave
+          </a>
+          <a class="nav-link {% if request.path == url_for('my_leaves') %}active{% endif %}"
+             href="{{ url_for('my_leaves') }}">
+             <span class="icon">&#8801;</span> My Leave Requests
+          </a>
+          <a class="nav-link {% if request.path == url_for('profile') %}active{% endif %}"
+             href="{{ url_for('profile') }}">
+             <span class="icon">&#9679;</span> Profile
+          </a>
+        {% elif session.role == 'admin' %}
+          <a class="nav-link {% if request.path == url_for('admin_dashboard') %}active{% endif %}"
+             href="{{ url_for('admin_dashboard') }}">
+             <span class="icon">&#9632;</span> Dashboard
+          </a>
+          <a class="nav-link {% if request.path == url_for('admin_leaves') %}active{% endif %}"
+             href="{{ url_for('admin_leaves') }}">
+             <span class="icon">&#8801;</span> Leave Requests
+          </a>
+          <a class="nav-link {% if request.path == url_for('admin_employees') %}active{% endif %}"
+             href="{{ url_for('admin_employees') }}">
+             <span class="icon">&#128101;</span> Employees
+          </a>
+        {% endif %}
+        <a class="nav-link" href="{{ url_for('logout') }}">
+           <span class="icon">&#10148;</span> Logout
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        Logged in as<br>
+        <strong style="color:#fff;">{{ session.full_name }}</strong>
+      </div>
+    </aside>
+
+    <div class="main-area">
+      <header class="topbar">
+        <div style="display:flex; align-items:center; gap:14px;">
+          <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">&#9776;</button>
+          <div class="page-title">{% block page_title %}{% endblock %}</div>
+        </div>
+        <div class="user-chip">
+          <div>
+            <div>{{ session.full_name }}</div>
+            <div class="role-tag">{{ session.role }}</div>
+          </div>
+          <div class="avatar">{{ session.full_name[0] if session.full_name else '?' }}</div>
+        </div>
+      </header>
+
+      <main class="content">
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}My Leave Requests - Employee Leave Management{% endblock %}
+{% block page_title %}My Leave Requests{% endblock %}
+
+{% block content %}
+  <div class="section-heading">
+    <h2>All Requests</h2>
+    <a href="{{ url_for('apply_leave') }}" class="btn btn-primary btn-sm">+ Apply for Leave</a>
+  </div>
+
+  <div class="filter-bar">
+    <div class="filter-pills">
+      <a class="filter-pill {% if status_filter == 'All' %}active{% endif %}"
+         href="{{ url_for('my_leaves', status='All') }}">All</a>
+      <a class="filter-pill {% if status_filter == 'Pending' %}active{% endif %}"
+         href="{{ url_for('my_leaves', status='Pending') }}">Pending</a>
+      <a class="filter-pill {% if status_filter == 'Approved' %}active{% endif %}"
+         href="{{ url_for('my_leaves', status='Approved') }}">Approved</a>
+      <a class="filter-pill {% if status_filter == 'Rejected' %}active{% endif %}"
+         href="{{ url_for('my_leaves', status='Rejected') }}">Rejected</a>
+    </div>
+  </div>
+
+  {% if leaves %}
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Leave ID</th>
+            <th>Type</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Days</th>
+            <th>Reason</th>
+            <th>Applied On</th>
+            <th>Status</th>
+            <th>Admin Comment</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for leave in leaves %}
+            <tr>
+              <td>#{{ leave.id }}</td>
+              <td>{{ leave.leave_type }}</td>
+              <td>{{ leave.start_date.strftime('%d %b %Y') }}</td>
+              <td>{{ leave.end_date.strftime('%d %b %Y') }}</td>
+              <td>{{ leave.num_days }}</td>
+              <td style="max-width:220px; white-space:normal;">{{ leave.reason }}</td>
+              <td>{{ leave.created_at.strftime('%d %b %Y') }}</td>
+              <td><span class="badge status-{{ leave.status|lower }}">{{ leave.status }}</span></td>
+              <td style="max-width:180px; white-space:normal;">{{ leave.admin_comment or '-' }}</td>
+              <td>
+                {% if leave.status == 'Pending' %}
+                  <form method="POST" action="{{ url_for('cancel_leave', leave_id=leave.id) }}"
+                        class="cancel-leave-form">
+                    <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+                  </form>
+                {% else %}
+                  &mdash;
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="card empty-state">
+      <div class="empty-icon">&#128203;</div>
+      <p>No leave requests found.</p>
+    </div>
+  {% endif %}
+{% endblock %}

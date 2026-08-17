@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Employee Leave Management</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container" id="flashContainer">
+        {% for category, message in messages %}
+          {% set css_class = 'flash-info' %}
+          {% if category == 'success' %}{% set css_class = 'flash-success' %}{% endif %}
+          {% if category == 'error' %}{% set css_class = 'flash-error' %}{% endif %}
+          {% if category == 'warning' %}{% set css_class = 'flash-warning' %}{% endif %}
+          <div class="flash {{ css_class }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <div class="auth-page">
+    <div class="auth-card">
+      <div class="brand">
+        <div class="brand-badge">EL</div>
+        <h1>LeaveManager</h1>
+      </div>
+      <p class="auth-subtitle">Sign in to manage your leave requests.</p>
+
+      <form method="POST" action="{{ url_for('login') }}" novalidate>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" value="{{ email }}" required autofocus>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Log In</button>
+      </form>
+
+      <div class="auth-footer">
+        Don't have an account? <a href="{{ url_for('register') }}">Register here</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

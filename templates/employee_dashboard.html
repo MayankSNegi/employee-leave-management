@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Employee Dashboard - Employee Leave Management{% endblock %}
+{% block page_title %}Employee Dashboard{% endblock %}
+
+{% block content %}
+  <div class="section-heading">
+    <h2>Welcome, {{ session.full_name }}</h2>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card accent-total">
+      <div class="stat-label">Total Leave Requests</div>
+      <div class="stat-value">{{ stats.total }}</div>
+    </div>
+    <div class="stat-card accent-pending">
+      <div class="stat-label">Pending Requests</div>
+      <div class="stat-value">{{ stats.pending }}</div>
+    </div>
+    <div class="stat-card accent-approved">
+      <div class="stat-label">Approved Requests</div>
+      <div class="stat-value">{{ stats.approved }}</div>
+    </div>
+    <div class="stat-card accent-rejected">
+      <div class="stat-label">Rejected Requests</div>
+      <div class="stat-value">{{ stats.rejected }}</div>
+    </div>
+  </div>
+
+  <div class="section-heading">
+    <h2>Recent Leave Requests</h2>
+    <a href="{{ url_for('apply_leave') }}" class="btn btn-primary btn-sm">+ Apply for Leave</a>
+  </div>
+
+  {% if recent_leaves %}
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Leave Type</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Days</th>
+            <th>Applied On</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for leave in recent_leaves %}
+            <tr>
+              <td>{{ leave.leave_type }}</td>
+              <td>{{ leave.start_date.strftime('%d %b %Y') }}</td>
+              <td>{{ leave.end_date.strftime('%d %b %Y') }}</td>
+              <td>{{ leave.num_days }}</td>
+              <td>{{ leave.created_at.strftime('%d %b %Y') }}</td>
+              <td>
+                <span class="badge status-{{ leave.status|lower }}">{{ leave.status }}</span>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="card empty-state">
+      <div class="empty-icon">&#128203;</div>
+      <p>You haven't submitted any leave requests yet.</p>
+      <a href="{{ url_for('apply_leave') }}" class="btn btn-primary btn-sm">Apply for Leave</a>
+    </div>
+  {% endif %}
+{% endblock %}

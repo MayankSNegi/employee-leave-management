@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Apply Leave - Employee Leave Management{% endblock %}
+{% block page_title %}Apply for Leave{% endblock %}
+
+{% block content %}
+  <div class="card" style="max-width:620px;">
+    <h2 style="margin-bottom:4px;">New Leave Request</h2>
+    <p style="color:var(--color-text-muted); font-size:14px; margin-bottom:20px;">
+      Fill in the details below. Your request will be marked as <strong>Pending</strong>
+      until an administrator reviews it.
+    </p>
+
+    <form method="POST" action="{{ url_for('apply_leave') }}" id="applyLeaveForm" novalidate>
+      <div class="form-group">
+        <label for="leave_type">Leave Type</label>
+        <select id="leave_type" name="leave_type" required>
+          <option value="" disabled {% if not form_data.leave_type %}selected{% endif %}>Select leave type</option>
+          {% for type in leave_types %}
+            <option value="{{ type }}" {% if form_data.leave_type == type %}selected{% endif %}>{{ type }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="start_date">Start Date</label>
+          <input type="date" id="start_date" name="start_date"
+                 value="{{ form_data.start_date or '' }}" required>
+        </div>
+        <div class="form-group">
+          <label for="end_date">End Date</label>
+          <input type="date" id="end_date" name="end_date"
+                 value="{{ form_data.end_date or '' }}" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="reason">Reason</label>
+        <textarea id="reason" name="reason" maxlength="500"
+                  placeholder="Briefly describe the reason for your leave..." required>{{ form_data.reason or '' }}</textarea>
+        <div class="field-hint">Maximum 500 characters.</div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block">Submit Leave Request</button>
+    </form>
+  </div>
+{% endblock %}
