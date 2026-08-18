@@ -3,9 +3,9 @@
    ===================================================================== */
 
 :root {
-  --color-primary: #4f46e5;
-  --color-primary-dark: #4338ca;
-  --color-primary-light: #eef2ff;
+  --color-primary: #C65D3A;
+  --color-primary-dark: #A94B2E;
+  --color-primary-light: #FCEEE8;
   --color-success: #16a34a;
   --color-success-light: #dcfce7;
   --color-warning: #d97706;
@@ -15,11 +15,11 @@
   --color-info: #0284c7;
   --color-info-light: #e0f2fe;
 
-  --color-bg: #f4f5fa;
-  --color-surface: #ffffff;
-  --color-text: #1f2333;
-  --color-text-muted: #6b7280;
-  --color-border: #e5e7eb;
+  --color-bg: #F7F4EF;
+  --color-surface: #FFFFFF;
+  --color-text: #292524;
+  --color-text-muted: #78716C;
+  --color-border: #E7E0D8;
 
   --radius-sm: 6px;
   --radius-md: 10px;
@@ -75,7 +75,7 @@ p {
   align-items: center;
   justify-content: center;
   padding: 24px;
-  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 45%, #818cf8 100%);
+  background: linear-gradient(135deg, #A94B2E 0%, #C65D3A 50%, #D98A70 100%);
 }
 
 .auth-card {
@@ -134,8 +134,8 @@ p {
 
 .sidebar {
   width: var(--sidebar-width);
-  background: #191b2b;
-  color: #cfd2e6;
+  background: #2B2926;
+  color: #E7E2DA;
   flex-shrink: 0;
   position: fixed;
   top: 0;
@@ -178,7 +178,7 @@ p {
 
 .sidebar .brand-tag {
   font-size: 11px;
-  color: #9296b3;
+  color: #A8A197;
 }
 
 .sidebar nav {
@@ -192,7 +192,7 @@ p {
   gap: 10px;
   padding: 11px 14px;
   border-radius: var(--radius-sm);
-  color: #cfd2e6;
+  color: #D6D0C7;
   font-size: 14px;
   font-weight: 500;
   margin-bottom: 4px;
@@ -218,7 +218,7 @@ p {
   padding: 16px 22px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   font-size: 12px;
-  color: #9296b3;
+  color: #A8A197;
 }
 
 .main-area {
